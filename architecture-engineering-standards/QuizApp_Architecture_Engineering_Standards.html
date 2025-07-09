@@ -358,7 +358,7 @@
       }
 
       const totalCorrectSoFar = userAnswers.reduce((a, b) => a + b, 0) + score;
-      const totalQuestionsSoFar = userAnswers.reduce((sum, count) => sum + count, 0) + segment.length;
+     const totalQuestionsSoFar = userAnswers.reduce((a, b, i) => a + questions[i].length, 0) + segment.length;
       const segmentPercent = Math.round((score / segment.length) * 100);
       const totalPercent = Math.round((totalCorrectSoFar / totalQuestionsSoFar) * 100);
 

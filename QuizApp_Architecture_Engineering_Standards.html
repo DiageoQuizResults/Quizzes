@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Architecture and Engineering Standards Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      padding: 30px;
+      margin-top: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 700px;
+    }
+    h1 {
+      text-align: center;
+      color: #2b3a55;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      margin-top: 5px;
+    }
+    button {
+      background-color: #0057a4;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #003f7d;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question p {
+      font-weight: bold;
+    }
+    .question label {
+      font-weight: normal;
+    }
+    .hidden {
+      display: none;
+    }
+    .final-result {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #2b3a55;
+    }
+    .pass { color: green; font-weight: bold; }
+    .fail { color: red; font-weight: bold; }
+    .segment-title {
+      font-weight: bold;
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2b3a55;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Architecture and Engineering Standards Quiz</h1>
+<p style="text-align: center; font-size: 16px; color: #555;">You need to score at least 75% to pass this quiz.</p>
+    <div id="loginPanel">
+      <label>Name:
+        <input id="userName" placeholder="Enter your name" type="text" />
+      </label>
+      <label>Email:
+        <input id="userEmail" placeholder="Enter your email" type="email" />
+      </label>
+      <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+    <div class="hidden" id="quizPanel"></div>
+    <div class="hidden final-result" id="finalScore"></div>
+  </div>
+
+  <script id="quiz-data" type="application/json">
+   {
+  "quizName": "Architecture and Engineering Standards",
+  "segmentTitles": [
+    "Topic 1: Medallion Architecture",
+    "Topic 2: Data Contracts",
+    "Topic 3: Data Integration",
+    "Topic 4: Data Modelling Best Practices",
+    "Topic 5: Principles of Engineering Development"
+  ],
+  "segments": [
+    [
+      {
+        "question": "You discover duplicate products in two markets. Which layer failed?",
+        "options": [
+          "Bronze",
+          "Silver",
+          "Gold",
+          "Platinum"
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Who signs off that data is ready for consumer use?",
+        "options": [
+          "Data Custodian",
+          "Data Steward",
+          "Data Product Owner",
+          "Data Consumer"
+        ],
+        "answer": 2
+      },
+      {
+        "question": "The dashboard displays weekly sales incorrectly. Which layer are we in?",
+        "options": [
+          "Bronze",
+          "Gold",
+          "Platinum",
+          "Silver"
+        ],
+        "answer": 2
+      }
+    ],
+    [
+      {
+        "question": "A producer renames a column without notice. What should have prevented this?",
+        "options": [
+          "Bronze layer QC",
+          "Contract schema enforcement",
+          "Metadata indexing",
+          "Data Owner sign-off"
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Which persona is responsible for defining expected delivery times?",
+        "options": [
+          "Data Custodian",
+          "Data Product Owner",
+          "Data Producer",
+          "Data Consumer"
+        ],
+        "answer": 1
+      },
+      {
+        "question": "What should happen if a contract is breached?",
+        "options": [
+          "Alert triggered, logged, and escalated",
+          "Data product is paused automatically",
+          "No action unless a consumer complains",
+          "All files are dropped"
+        ],
+        "answer": 0
+      }
+    ],
+    [
+      {
+        "question": "Which of the following best describes idempotent pipeline design?",
+        "options": [
+          "Ensures only valid users can access data",
+          "Enables retry without duplicating data",
+          "Encrypts the data at rest",
+          "Flags broken transformations"
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Who is typically responsible for building and monitoring data pipelines?",
+        "options": [
+          "Data Steward",
+          "Data Custodian",
+          "Data Product Owner",
+          "Data Consumer"
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Which is NOT a core principle of Diageo's integration standard?",
+        "options": [
+          "Observability",
+          "Retry logic",
+          "Harmonisation rules",
+          "Lineage tracking"
+        ],
+        "answer": 2
+      }
+    ],
+    [
+      {
+        "question": "A model redefines \u2018Net Sales\u2019 in a way that conflicts with the Finance standard. What\u2019s missing?",
+        "options": [
+          "Harmonisation",
+          "Conformed logic",
+          "Data contract",
+          "Integration check"
+        ],
+        "answer": 1
+      },
+      {
+        "question": "Who ensures business definitions are correctly applied to model fields?",
+        "options": [
+          "Data Steward",
+          "Data Custodian",
+          "Data Product Owner",
+          "Data Producer"
+        ],
+        "answer": 0
+      },
+      {
+        "question": "Which is a key benefit of standardised data models?",
+        "options": [
+          "Reduces the need for metadata",
+          "Makes pipeline design easier",
+          "Ensures consistent reporting across teams",
+          "Hides transformation logic from consumers"
+        ],
+        "answer": 2
+      }
+    ],
+    [
+      {
+        "question": "What is the main purpose of automated pipeline testing?",
+        "options": [
+          "Speed up ingestion",
+          "Reduce DevOps workload",
+          "Catch issues before they affect users",
+          "Harmonise inputs"
+        ],
+        "answer": 2
+      },
+      {
+        "question": "What should every production pipeline have?",
+        "options": [
+          "Business glossary",
+          "Silver layer outputs",
+          "Logging and alerting",
+          "Excel exports"
+        ],
+        "answer": 2
+      },
+      {
+        "question": "Why use version control for pipeline changes?",
+        "options": [
+          "So the dashboard can refresh automatically",
+          "To avoid overwriting another team\u2019s work",
+          "To clean Bronze layer files",
+          "To enforce business definitions"
+        ],
+        "answer": 1
+      }
+    ]
+  ]
+}
+  </script>
+
+  <script>
+    const quizData = JSON.parse(document.getElementById("quiz-data").textContent);
+    const quizName = quizData.quizName;
+    const questions = quizData.segments;
+    const segmentTitles = quizData.segmentTitles;
+    const isSegmented = Array.isArray(questions[0]);
+
+    let userAnswers = [];
+    let questionLog = [];
+    let currentSegment = 0;
+    let userName = "";
+    let userEmail = "";
+
+    function startQuiz() {
+      userName = document.getElementById("userName").value;
+      userEmail = document.getElementById("userEmail").value;
+      if (!userName || !userEmail) {
+        alert("Please enter both name and email.");
+        return;
+      }
+      document.getElementById("loginPanel").classList.add("hidden");
+      document.getElementById("quizPanel").classList.remove("hidden");
+      showSegment();
+    }
+
+    function showSegment() {
+      const quizPanel = document.getElementById("quizPanel");
+      quizPanel.innerHTML = "";
+
+      const segment = isSegmented ? questions[currentSegment] : questions;
+      const title = isSegmented ? segmentTitles[currentSegment] : quizName;
+      if (!segment || (!isSegmented && currentSegment > 0)) {
+        showFinalScore();
+        return;
+      }
+
+      const form = document.createElement("form");
+      form.innerHTML = `<div class='segment-title'>${title}</div>`;
+
+      segment.forEach((q, i) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `<p>${q.question}</p>` +
+          q.options.map((opt, j) => `
+            <label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>
+          `).join("");
+        form.appendChild(div);
+      });
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = isSegmented ? "Submit Topic" : "Submit Quiz";
+      btn.onclick = () => submitSegment(form, segment);
+      form.appendChild(btn);
+      quizPanel.appendChild(form);
+    }
+
+    function submitSegment(form, segment) {
+      let score = 0;
+      let allAnswered = true; // Flag to check if all questions are answered
+
+      segment.forEach((q, i) => {
+        const selected = form.querySelector(`input[name=q${i}]:checked`);
+        const selectedVal = selected ? parseInt(selected.value) : null;
+
+        if (selectedVal === null) { // Check if a question is not answered
+          allAnswered = false; //
+        }
+
+        questionLog.push({ question: q.question, selected: selectedVal !== null ? q.options[selectedVal] : "None", correct: q.options[q.answer] });
+        if (selectedVal === q.answer) score++;
+      });
+
+      if (!allAnswered) { // If not all questions are answered
+        alert("Please answer all questions before submitting this topic."); //
+        // Remove the last pushed questions from questionLog as the segment was not submitted
+        questionLog.splice(questionLog.length - segment.length, segment.length); //
+        return; // Stop the function if not all questions are answered
+      }
+
+      const totalCorrectSoFar = userAnswers.reduce((a, b) => a + b, 0) + score;
+     const totalQuestionsSoFar = userAnswers.reduce((a, b, i) => a + questions[i].length, 0) + segment.length;
+      const segmentPercent = Math.round((score / segment.length) * 100);
+      const totalPercent = Math.round((totalCorrectSoFar / totalQuestionsSoFar) * 100);
+
+      userAnswers.push(score);
+
+      alert(`Topic completed.
+Segment Score: ${score} / ${segment.length} (${segmentPercent}%)
+Correct answers so far: ${totalCorrectSoFar} / ${totalQuestionsSoFar} (${totalPercent}%)`);
+
+      currentSegment++;
+      showSegment();
+    }
+
+    function showFinalScore() {
+      const totalCorrect = userAnswers.reduce((a, b) => a + b, 0);
+      const totalQuestions = questions.flat().length;
+      const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+      const passed = percentage >= 75;
+
+      const final = document.getElementById("finalScore");
+      final.classList.remove("hidden");
+      final.innerHTML = `
+        <h2>Final Score</h2>
+        <p><strong>${userName}</strong> (${userEmail})</p>
+        <p>Total Questions: ${totalQuestions}</p>
+        <p>Total Correct: ${totalCorrect}</p>
+        <p>Score: ${percentage}%</p>
+        <p class="${passed ? 'pass' : 'fail'}">${passed ? 'Pass 🎉' : 'Fail ❌'}</p>
+        <button onclick="resetQuiz()">Retake Quiz</button>
+      `;
+
+      sendToGoogleSheet(userName, userEmail, userAnswers, totalCorrect, totalQuestions, percentage, questionLog);
+    }
+
+    function resetQuiz() {
+      userAnswers = [];
+      questionLog = [];
+      currentSegment = 0;
+      document.getElementById("finalScore").classList.add("hidden");
+      document.getElementById("quizPanel").classList.add("hidden");
+      document.getElementById("loginPanel").classList.remove("hidden");
+    }
+
+    function sendToGoogleSheet(name, email, segments, total, totalQuestions, percentage, questionDetails) {
+  const data = {
+    quiz: quizName,
+    name: name,
+    email: email,
+    topics: segments.join("; "),
+    total: total,
+    totalQuestions: totalQuestions,
+    percentage: percentage,
+    questionDetails: questionDetails.map(q => `${q.question} | Selected: ${q.selected} | Correct: ${q.correct}`).join(" // ")
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycby-QxAhKWJkvHwGLpu5X6XRGDhxLXgLCsSesuEw763SKKszH8wPCAACybnMnmXnap8IIQ/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(() => { // Add a .then() block
+    alert("Quiz results have been submitted!"); // Display an alert
+  }).catch(error => { // Optional: Add a .catch() for error handling, though less useful with no-cors
+    console.error("Error submitting results:", error);
+    alert("There was an issue submitting your quiz results. Please try again.");
+  });
+}
+  </script>
+</body>
+</html>

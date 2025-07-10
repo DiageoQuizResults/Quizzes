@@ -2,18 +2,11 @@
 
 This repository contains self-contained quiz apps for internal training use.
 
-## Quizzes
-
-- [Architecture & Engineering Standards](./architecture-engineering-standards/)
-- [Data Quality](./data-quality/)
-- [Data Ownership](./data-ownership/)
-- [Quiz Editor Tool](./quiz-editor/)
-
 ## How to Use
 
-1. Open any folder and launch `index.html` in a browser to start the quiz.
+1. Launch a quiz in a browser to start the quiz.
 2. Each quiz saves scores to a Google Sheet via an embedded Apps Script Web App.
-3. Update questions by modifying the embedded JSON or using the Quiz Editor.
+3. Update questions by modifying the JSON script in the Quiz HTML file.
 
 ## Hosting
 

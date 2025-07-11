@@ -336,37 +336,49 @@
 
     function submitSegment(form, segment) {
       let score = 0;
-      let allAnswered = true; // Flag to check if all questions are answered
+      let allAnswered = true;
+      let incorrectFeedback = []; // Array to store feedback for incorrect answers
 
       segment.forEach((q, i) => {
         const selected = form.querySelector(`input[name=q${i}]:checked`);
         const selectedVal = selected ? parseInt(selected.value) : null;
 
-        if (selectedVal === null) { // Check if a question is not answered
-          allAnswered = false; //
+        if (selectedVal === null) {
+          allAnswered = false;
         }
 
         questionLog.push({ question: q.question, selected: selectedVal !== null ? q.options[selectedVal] : "None", correct: q.options[q.answer] });
-        if (selectedVal === q.answer) score++;
+
+        if (selectedVal === q.answer) {
+          score++;
+        } else {
+          // If the answer is incorrect or not selected, add to feedback
+          incorrectFeedback.push(
+            `Question: ${q.question}\nYour Answer: ${selectedVal !== null ? q.options[selectedVal] : "No answer selected"}\nCorrect Answer: ${q.options[q.answer]}`
+          );
+        }
       });
 
-      if (!allAnswered) { // If not all questions are answered
-        alert("Please answer all questions before submitting this topic."); //
-        // Remove the last pushed questions from questionLog as the segment was not submitted
-        questionLog.splice(questionLog.length - segment.length, segment.length); //
-        return; // Stop the function if not all questions are answered
+      if (!allAnswered) {
+        alert("Please answer all questions before submitting this topic.");
+        questionLog.splice(questionLog.length - segment.length, segment.length);
+        return;
       }
 
       const totalCorrectSoFar = userAnswers.reduce((a, b) => a + b, 0) + score;
-     const totalQuestionsSoFar = userAnswers.reduce((a, b, i) => a + questions[i].length, 0) + segment.length;
+      const totalQuestionsSoFar = userAnswers.reduce((a, b, i) => a + questions[i].length, 0) + segment.length;
       const segmentPercent = Math.round((score / segment.length) * 100);
       const totalPercent = Math.round((totalCorrectSoFar / totalQuestionsSoFar) * 100);
 
       userAnswers.push(score);
 
-      alert(`Topic completed.
-Segment Score: ${score} / ${segment.length} (${segmentPercent}%)
-Correct answers so far: ${totalCorrectSoFar} / ${totalQuestionsSoFar} (${totalPercent}%)`);
+      let feedbackMessage = `Topic completed.\nSegment Score: ${score} / ${segment.length} (${segmentPercent}%)\nCorrect answers so far: ${totalCorrectSoFar} / ${totalQuestionsSoFar} (${totalPercent}%)`;
+
+      if (incorrectFeedback.length > 0) {
+        feedbackMessage += "\n\nIncorrect Answers:\n" + incorrectFeedback.join("\n\n");
+      }
+
+      alert(feedbackMessage);
 
       currentSegment++;
       showSegment();
